@@ -1,5 +1,6 @@
 import './Chat.css'
 import {useEffect, useRef, useState} from "react";
+import {useSelector} from "react-redux";
 
 import planetEarth from '/public/planet-earth.png';
 import planetMars from '/public/mars.png';
@@ -14,17 +15,16 @@ function Chat() {
     const socket = useRef();
     const messagesContainerRef = useRef(null);
     const fileInputRef = useRef(null);
-    const username = localStorage.getItem("username");
-    const planet = localStorage.getItem("planet");
+    const { username, planet } = useSelector((state) => state.auth);
 
     // Determine WebSocket URL based on planet
     const getWebSocketUrl = () => {
         if (planet === "Earth") {
-            return "ws://localhost:8005";
+            return "ws://192.168.56.1:8005";
         } else if (planet === "Mars") {
-            return "ws://localhost:8010";
+            return "ws://192.168.56.1:8010";
         }
-        return "ws://localhost:8005"; // Default to Earth
+        return "ws://192.168.56.1:8005";
     };
 
     function connect() {
@@ -73,7 +73,7 @@ function Chat() {
         scrollToBottom();
     }, [messages]);
 
-    const sendMessage = () => {
+    const sendMessage = async () => {
         if (!value.trim() || planet !== "Earth") return; // Only Earth can send messages
 
         const message = {
@@ -83,6 +83,7 @@ function Chat() {
             planet: "Earth",
             id: Date.now()
         };
+
         socket.current.send(JSON.stringify(message));
         setValue('');
     };
@@ -138,7 +139,7 @@ function Chat() {
                 <div className="chat-messages" ref={messagesContainerRef}>
                     {messages.map(mess =>
                         !mess.message ? (
-                            <div key={mess.id} className="connection-message">Пользователь {username} подключился!</div>
+                            <div key={mess.id} className="connection-message">Пользователь {mess.username} подключился!</div>
                         ) : (
                             <div
                                 key={mess.id}

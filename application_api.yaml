@@ -1,0 +1,95 @@
+openapi: 3.0.0
+info:
+  title: CosmoChat Application Layer API
+  version: 1.0.0
+  description: API documentation for the CosmoChat application layer
+  contact:
+    name: Eugene Tabakhov
+servers:
+  - url: http://localhost:3001
+    description: Application Layer Server
+paths:
+  /receive:
+    post:
+      summary: Receive a message from the transport layer
+      description: Endpoint for the transport layer to send messages to Mars clients
+      tags:
+        - Messages
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Message'
+      responses:
+        '200':
+          description: Message successfully received and broadcasted to Mars clients
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: Message received and broadcasted to Mars
+        '400':
+          description: Invalid message format
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: Invalid message format
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: Internal server error
+components:
+  schemas:
+    Message:
+      type: object
+      required:
+        - event
+        - username
+        - message
+        - id
+      properties:
+        event:
+          type: string
+          description: Type of event ('message', 'connection')
+        username:
+          type: string
+          description: Username of the message sender
+        message:
+          type: string
+          description: Content of the message
+        id:
+          type: number
+          description: Unique message identifier (timestamp)
+        planet:
+          type: string
+          description: Planet of origin (Earth or Mars)
+      example:
+        event: message
+        username: JohnDoe
+        message: Hello from Earth!
+        id: 1679234567890
+        planet: Earth
+tags: []

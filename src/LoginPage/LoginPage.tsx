@@ -2,16 +2,19 @@ import {useState} from "react";
 import './LoginPage.css'
 import { Link } from 'react-router-dom'
 
+import {login} from "../redux/authSlice.tsx";
+
 import planetEarth from '/public/planet-earth.png';
 import planetMars from '/public/mars.png';
+import {useDispatch} from "react-redux";
 
 function LoginPage() {
     const [username, setUsername] = useState("");
-    const [selectedPlanet, setSelectedPlanet] = useState("Earth");
+    const [planet, setPlanet] = useState("Earth");
+    const dispatch = useDispatch();
 
     function SignIn() {
-        localStorage.setItem("username", username);
-        localStorage.setItem("planet", selectedPlanet);
+        dispatch(login({ username, planet }));
     }
 
     return (
@@ -31,16 +34,16 @@ function LoginPage() {
                         <select
                             id="planet-select"
                             className="planet-select"
-                            value={selectedPlanet}
-                            onChange={(e) => setSelectedPlanet(e.target.value)}
+                            value={planet}
+                            onChange={(e) => setPlanet(e.target.value)}
                         >
                             <option value="Earth">Earth</option>
                             <option value="Mars">Mars</option>
                         </select>
                         <div className="planet-icon-container">
                             <img
-                                src={selectedPlanet === "Earth" ? planetEarth : planetMars}
-                                alt={selectedPlanet}
+                                src={planet === "Earth" ? planetEarth : planetMars}
+                                alt={planet}
                                 className="planet-icon"
                             />
                         </div>

@@ -3,21 +3,22 @@ import { useNavigate } from 'react-router-dom';
 import LogoutIcon from '@mui/icons-material/Logout';
 import './Navbar.css';
 
+import {logout} from "../../redux/authSlice.tsx";
+import {useDispatch} from "react-redux";
+
 function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const menuRef = useRef(null);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
     };
 
     const handleLogout = () => {
-        // Clear localStorage
-        localStorage.removeItem("username");
-        localStorage.removeItem("planet");
+        dispatch(logout());
 
-        // Redirect to login page
         navigate("/");
     };
 

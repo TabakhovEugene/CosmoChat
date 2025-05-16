@@ -1,14 +1,17 @@
 .login-background {
     margin: 0;
     padding: 0;
-    background: url("/planet-earth-background.jpg");
-    image-rendering: high-quality;
+    background: url("/planet-earth-background.jpg") no-repeat center center fixed;
     background-size: cover;
+    image-rendering: high-quality;
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100%;
-    height: 722px;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
 }
 
 .login-form {
