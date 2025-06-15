@@ -212,7 +212,7 @@ app.post('/receive', (req, res) => {
         const { message, sendTime, username, error } = req.body;
         console.log('Message received from transport layer:', req.body);
 
-        if (!message || !username || !sendTime) {
+        if (!username || !sendTime) {
             return res.status(400).json({
                 status: 'error',
                 message: 'Invalid message format'
@@ -224,8 +224,11 @@ app.post('/receive', (req, res) => {
             username,
             message,
             id: Date.parse(sendTime),
-            planet: 'Earth'
+            planet: 'Earth',
+            error
         };
+
+        console.log(broadcast);
 
         broadcastMessage(earthWss, broadcast);
         broadcastMessage(marsWss, broadcast);
