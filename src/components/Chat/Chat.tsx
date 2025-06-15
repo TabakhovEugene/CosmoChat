@@ -20,11 +20,11 @@ function Chat() {
     // Determine WebSocket URL based on planet
     const getWebSocketUrl = () => {
         if (planet === "Earth") {
-            return "ws://192.168.56.1:8005";
+            return "ws://192.168.43.131:8005";
         } else if (planet === "Mars") {
-            return "ws://192.168.56.1:8010";
+            return "ws://192.168.43.131:8010";
         }
-        return "ws://192.168.56.1:8005";
+        return "ws://192.168.43.131:8005";
     };
 
     function connect() {
@@ -137,10 +137,33 @@ function Chat() {
                 </div>
 
                 <div className="chat-messages" ref={messagesContainerRef}>
-                    {messages.map(mess =>
-                        !mess.message ? (
-                            <div key={mess.id} className="connection-message">Пользователь {mess.username} подключился!</div>
-                        ) : (
+                    {messages.map(mess => {
+                        const isError = !!mess.error;
+
+                        if (isError) {
+                            return (
+                                <div
+                                    key={mess.id}
+                                    className={`message-wrapper ${planet === "Mars" ? "mars-message" : ""}`}
+                                >
+                                    <span className="message-author">{mess.username}</span>
+                                    <div className="message error-message-bubble">
+                                        Сообщение потеряно!
+                                    </div>
+                                    <span className="message-time">{formatTime(mess.id)}</span>
+                                </div>
+                            );
+                        }
+
+                        if (!mess.message) {
+                            return (
+                                <div key={mess.id} className="connection-message">
+                                    Пользователь {mess.username} подключился!
+                                </div>
+                            );
+                        }
+
+                        return (
                             <div
                                 key={mess.id}
                                 className={`message-wrapper ${planet === "Mars" ? "mars-message" : ""}`}
@@ -151,8 +174,8 @@ function Chat() {
                                 </div>
                                 <span className="message-time">{formatTime(mess.id)}</span>
                             </div>
-                        )
-                    )}
+                        );
+                    })}
                 </div>
 
                 <div className="chat-input">

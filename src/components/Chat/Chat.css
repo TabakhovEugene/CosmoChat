@@ -152,6 +152,12 @@
     font-size: 14px;
 }
 
+/* Error Message Bubble */
+.error-message-bubble {
+    background: #ff3b3b;
+    color: white;
+}
+
 /* Время сообщения */
 .message-time {
     font-size: 10px;
